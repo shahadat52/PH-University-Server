@@ -1,4 +1,5 @@
 import QueryBuilder from '../../builder/QueryBuilder';
+import AppError from '../../errors/AppError';
 import {
   AcademicSemesterSearchableFields,
   academicSemesterNameCodeMapper,
@@ -7,6 +8,10 @@ import { TAcademicSemester } from './academicSemester.interface';
 import { AcademicSemester } from './academicSemester.model';
 
 const createAcademicSemesterIntoDB = async (payload: TAcademicSemester) => {
+  const isExistsSemester = await AcademicSemester.find({ year: payload?.year, name: payload.name })
+  if (isExistsSemester.length > 0) {
+    throw new AppError(404, `${payload.name} is already exists`)
+  }
   if (academicSemesterNameCodeMapper[payload.name] !== payload.code) {
     throw new Error('Invalid Semester Code');
   }

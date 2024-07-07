@@ -10,6 +10,7 @@ import { createToken, verifyToken } from './auth.utils';
 
 const loginUser = async (payload: TLoginUser) => {
   // checking if the user is exist
+  console.log('login');
   const user = await User.isUserExistsByCustomId(payload.id);
 
   if (!user) {
